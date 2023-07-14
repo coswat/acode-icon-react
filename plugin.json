@@ -6,6 +6,7 @@
   "readme": "readme.md",
   "icon": "icon.png",
   "files": [],
+  "minVersionCode": 292,
   "author": {
     "name": "coderswat",
     "email": "abhishek.b4696@gmail.com",
