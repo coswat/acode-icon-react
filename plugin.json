@@ -1,0 +1,14 @@
+{
+  "id": "acode.icon.react",
+  "name": "Icon React",
+  "main": "dist/main.js",
+  "version": "1.0.0",
+  "readme": "readme.md",
+  "icon": "icon.png",
+  "files": [],
+  "author": {
+    "name": "coderswat",
+    "email": "abhishek.b4696@gmail.com",
+    "github": "coswat"
+  }
+}
