@@ -1,5 +1,5 @@
 import plugin from "../plugin.json";
-import icon from './react.svg';
+import icon from "./react.svg";
 
 class IconReact {
   async init() {
