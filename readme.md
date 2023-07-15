@@ -8,7 +8,7 @@
 
 ## Screenshot
 
-![Example](https://github.com/coswat/acode-code-commenter/assets/97345827/66e461b8-7c4e-4521-893b-8aa374a25e1c)
+![Example](https://github.com/coswat/acode-icon-react/assets/97345827/a38e6039-735a-437a-ab9b-d5c844ffc997)
 
 ### Open source:
 Want to see the code? click [here](https://github.com/coswat/acode-icon-react) 
