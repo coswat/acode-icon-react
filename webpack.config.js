@@ -1,36 +1,45 @@
-const { exec } = require('child_process');
-const path = require('path');
+const { exec } = require("child_process");
+const path = require("path");
 
 module.exports = (env, options) => {
-  const { mode = 'development' } = options;
+  const { mode = "development" } = options;
   const rules = [
     {
       test: /\.m?js$/,
       use: [
-        'html-tag-js/jsx/tag-loader.js',
+        "html-tag-js/jsx/tag-loader.js",
         {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
-            presets: ['@babel/preset-env'],
+            presets: ["@babel/preset-env"],
           },
         },
       ],
     },
-     {
+    {
       test: /\.(svg|png)$/,
-      loader: 'file-loader',
-    }
+      exclude: /node_modules/,
+      loader: "file-loader",
+    },
+    {
+      test: /\.ts$/,
+      exclude: /node_modules/,
+      use: "ts-loader",
+    },
   ];
 
   const main = {
     mode,
     entry: {
-      main: './src/main.js',
+      main: "./src/main.ts",
     },
     output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: '[name].js',
-      chunkFilename: '[name].js',
+      path: path.resolve(__dirname, "dist"),
+      filename: "[name].js",
+      chunkFilename: "[name].js",
+    },
+    resolve: {
+      extensions: [".ts", ".js"],
     },
     module: {
       rules,
@@ -38,9 +47,9 @@ module.exports = (env, options) => {
     plugins: [
       {
         apply: (compiler) => {
-          compiler.hooks.afterDone.tap('pack-zip', () => {
+          compiler.hooks.afterDone.tap("pack-zip", () => {
             // run pack-zip.js
-            exec('node .vscode/pack-zip.js', (err, stdout, stderr) => {
+            exec("node .vscode/pack-zip.js", (err, stdout, stderr) => {
               if (err) {
                 console.error(err);
                 return;
@@ -48,10 +57,10 @@ module.exports = (env, options) => {
               console.log(stdout);
             });
           });
-        }
-      }
+        },
+      },
     ],
   };
 
   return [main];
-}
+};

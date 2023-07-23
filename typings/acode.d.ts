@@ -1,5 +1,53 @@
+type Strings = string[];
+declare var acode: Acode;
 
-export default class acode {
+
+interface WCPage extends HTMLElement {
+    on(event: 'hide' | 'show', cb: (this: WCPage) => void): void;
+    off(event: 'hide' | 'show', cb: (this: WCPage) => void): void;
+    
+    settitle(title: string): void;
+    
+    id: string,
+    
+    hide(): void;
+    show(): void;
+    
+    get body(): HTMLElement | null;
+    set body($el: HTMLElement | null);
+    
+    get innerHTML(): string | undefined;
+    set innerHTML(html: string);
+    
+    get textContent(): string | undefined;
+    set textContent(text: string);
+    
+    get lead(): HTMLElement;
+    set lead($el: HTMLElement);
+    
+    get header(): HTMLElement;
+    set header($el: HTMLElement);
+}
+
+interface Input {
+    id: string;
+    required?: boolean;
+    type: string;
+    match?: RegExp;
+    value?: string;
+    placeholder?: string;
+    hints?: string;
+    name?: string;
+    disabled?: boolean;
+    readOnly?: boolean;
+    autofocus?: boolean;
+    hidden?: boolean;
+    onclick?: (event: Event) => void;
+    onchange?: (event: Event) => void;
+}
+
+
+interface Acode {
     /**
      * Define a module
      * @param {string} name
@@ -15,7 +63,11 @@ export default class acode {
 
     setLoadingMessage(message: string): void;
 
-    setPluginInit(id: string, initFunction: (baseUrl: string, $page: HTMLElement, options?: any) => Promise<void>, settings: any): void;
+    setPluginInit(
+        id: string,
+        initFunction: (baseUrl: string, $page: WCPage, options?: any) => Promise<void>,
+        settings?: any
+    ): void;
 
     getPluginSettings(id: string): any;
 
@@ -24,9 +76,9 @@ export default class acode {
     /**
      * @param {string} id plugin id
      * @param {string} baseUrl local plugin url
-     * @param {HTMLElement} $page
+     * @param {WCPage} $page
      */
-    initPlugin(id: string, baseUrl: string, $page: HTMLElement, options?: any): Promise<void>;
+    initPlugin(id: string, baseUrl: string, $page: WCPage, options?: any): Promise<void>;
 
     unmountPlugin(id: string): void;
 
@@ -52,7 +104,7 @@ export default class acode {
     
     loader(title: string, message: string, cancel: { timeout: number,callback: ()=>void }): void;
     
-    joinUrl(...args: string): string;
+    joinUrl(...args: string[]): string;
     
     addIcon(className: string, src: string): void;
     
@@ -72,23 +124,41 @@ export default class acode {
     
     select(
         title: string,
-        options: string[string, string, string, boolean] | string,
+        options: [string, string, string, boolean][] | string,
         opts?: {
             onCancel?: () => void;
             onHide?: () => void;
             hideOnSelect?: boolean;
             textTransform?: boolean;
             default?: string;
-        } | rejectOnCancel: boolean
+        } | boolean
     ): Promise<any>;
-    
-    type Input = string;
-
-    type Strings = string[];
     
     multiPrompt(title: string, inputs: Array<Input | Input[]>, help: string): Promise<Strings>;
     
-    fileBrowser(mode: 'file' | 'folder' | 'both', info: string, doesOpenLast: boolean): Promise<import('.').SelectedFile>;
+    fileBrowser(mode: 'file' | 'folder' | 'both', info: string, doesOpenLast: boolean): Promise<
+    | {
+        name: string;
+        type: 'file';
+        url: string;
+      }
+    | {
+        list: {
+          icon: string;
+          isDirectory: boolean;
+          isFile: boolean;
+          mime: string;
+          name: string;
+          type: 'file' | 'folder';
+          uri: string;
+          url: string;
+        }[];
+        scroll: number;
+        name: string;
+        type: 'folder';
+        url: string;
+      }
+    >;
     
-    toInternalUrl(url:string): Promise<url: string>;
+    toInternalUrl(url: string): Promise<string>;
 }
